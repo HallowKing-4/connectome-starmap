@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-08-27T11:51:49Z",
+  "source": "Europe PMC REST (search + /references). No invented citations.",
+  "node_count": 187,
+  "edge_count": 700,
+  "community_count": 4,
+  "isolate_count": 9,
+  "communities": [
+    {"id": 0, "name": "Graph theory & hubs", "color": "#e0115f", "size": 81},
+    {"id": 1, "name": "Human Connectome Project", "color": "#2b6cff", "size": 44},
+    {"id": 2, "name": "Dynamics & resting-state", "color": "#3dcf8e", "size": 36},
+    {"id": 3, "name": "Methods & motion control", "color": "#c084fc", "size": 26}
+  ],
+  "edge_construction": {
+    "direct_pairs_before_cap": 1246,
+    "cocitation_pairs_before_cap": 2992,
+    "coupling_pairs_before_cap": 2791,
+    "citation_like_edges_before_cap": 5166,
+    "edges_after_cap": 700,
+    "edge_cap": 700,
+    "used_keyword_fallback": false,
+    "keyword_edges_added": 0,
+    "kind_counts_after_cap": {"direct": 670, "cocitation": 621, "coupling": 398},
+    "papers": 187,
+    "papers_flagged_has_references": 186,
+    "reference_lists_fetched": 186,
+    "reference_lists_nonempty": 186,
+    "raw_references_returned": 15961,
+    "raw_references_matched_into_corpus": 1268,
+    "reference_fetch_coverage": 0.995,
+    "in_corpus_match_rate": 0.0794
+  },
+  "notes": [
+    "Direct edges exist only when a reference list retrieved from Europe PMC names another corpus paper (PMID / DOI / normalized title match).",
+    "Co-citation edges exist only when two corpus papers appear together in a third corpus paper's retrieved reference list.",
+    "Bibliographic coupling is recorded when two corpus papers share at least two in-corpus references.",
+    "Keyword co-occurrence is a declared fallback used only if the citation-derived graph is sparse (<120 edges).",
+    "Displayed edges are capped at the top ~700 by combined weight and endpoint degree to keep gold traces faint behind the stars."
+  ]
+}

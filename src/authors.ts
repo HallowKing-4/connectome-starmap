@@ -6,13 +6,12 @@ export function normalizeAuthors(authors: AuthorInput, fallback = ""): string[] 
   }
   if (typeof authors === "string" && authors.trim()) {
     return authors
-      .split(/\s*;\s*|\s+and\s+|, \s+(?=[A-Z])/)
+      .split(/\s*;\s*|\s+and\s+|,\s+(?=[A-Z])/
+      )
       .map((a) => a.trim())
       .filter(Boolean);
   }
-  if (fallback.trim()) {
-    return normalizeAuthors(fallback);
-  }
+  if (fallback.trim()) return normalizeAuthors(fallback);
   return [];
 }
 

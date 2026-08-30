@@ -1,63 +1,66 @@
-export type AuthorField = string | string[] | null | undefined;
+export type AuthorInput = string | string[] | null | undefined;
 
-export interface GraphNode {
+export interface PaperNode {
   id: string;
-  title: string;
-  year: number | null;
-  authors: AuthorField;
-  author_list?: string[];
-  abstract: string;
-  url: string;
+  pmid: string;
+  pmcid?: string | null;
   doi?: string | null;
-  pmid?: string | null;
+  title: string;
+  year?: number | null;
+  authors: AuthorInput;
+  authorString?: string;
+  abstract: string;
   journal?: string | null;
-  cited_by_count: number;
-  keywords: string[];
+  citedByCount?: number;
+  keywords?: string[];
+  url?: string | null;
+  source?: string;
   community: number;
-  community_name: string;
-  color: string;
   degree: number;
-  fx: number;
-  fy: number;
-  fz: number;
-  val: number;
-  x?: number;
-  y?: number;
-  z?: number;
+  fullDegree?: number;
+  x: number; y: number; z: number;
+  fx?: number; fy?: number; fz?: number;
 }
 
 export interface GraphLink {
-  source: string | GraphNode;
-  target: string | GraphNode;
+  source: string | PaperNode;
+  target: string | PaperNode;
+  kind: string;
+  kinds?: string[];
   weight: number;
-  kinds: string[];
-  direct: boolean;
-  cocitation: number;
-  coupling: number;
-  keyword: number;
 }
 
-export interface CommunityMeta {
+export interface Community {
   id: number;
-  name: string;
-  color: string;
+  label: string;
   size: number;
 }
 
 export interface Completeness {
-  generated_at: string;
+  papers: number;
+  papersWithAbstract: number;
+  papersWithDoi: number;
+  papersWithResolvedReferences: number;
+  papersMissingReferences: number;
+  referenceCoverage: number;
+  directCitationEdges: number;
+  cocitationEdgesKept: number;
+  keywordFallbackUsed: boolean;
+  keywordFallbackEdges: number;
+  edgesBeforeCap: number;
+  edgesAfterCap: number;
+  edgesDroppedByDegreeCap: number;
+  communities: number;
+  communitySizes?: number[];
+  perNodeDisplayDegreeCap?: number;
   source: string;
-  node_count: number;
-  edge_count: number;
-  community_count: number;
-  isolate_count: number;
-  communities: CommunityMeta[];
-  edge_construction: Record<string, unknown>;
-  notes: string[];
+  edgePolicy: string[];
+  builtAt: string;
 }
 
-export interface GraphData {
-  nodes: GraphNode[];
+export interface GraphPayload {
+  nodes: PaperNode[];
   links: GraphLink[];
+  communities: Community[];
   completeness: Completeness;
 }

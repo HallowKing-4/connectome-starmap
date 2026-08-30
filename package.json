@@ -1,5 +1,5 @@
 {
-  "name": "connectome-starmap",
+  "name": "citation-starmap",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "jszip": "^3.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-force-graph-3d": "^1.26.1",

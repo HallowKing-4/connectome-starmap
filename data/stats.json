@@ -1,0 +1,20 @@
+{
+  "nPapers": 210,
+  "nWithDoi": 210,
+  "nWithAbstract": 167,
+  "nWithReferencesRetrieved": 210,
+  "nReferencesListed": 20277,
+  "nReferencesResolvedInCorpus": 1143,
+  "nDirectEdgesRaw": 1139,
+  "nCocitationEdgesRaw": 1532,
+  "nKeywordEdgesRaw": 0,
+  "nEdgesKept": 700,
+  "usedKeywordFallback": false,
+  "referenceCoverage": 1.0,
+  "inCorpusCitationResolution": 0.0564,
+  "edgeComposition": {
+    "direct": 257,
+    "cocitation": 443,
+    "keyword": 0
+  }
+}

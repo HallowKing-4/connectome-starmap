@@ -1,11 +1,12 @@
-# Citation Star-Map — Network Neuroscience
+# Connectome Star-Map
 
-Fully static, no-backend 3D citation constellation of real brain-connectomics papers.
+Fully static 3D citation atlas of real network-neuroscience papers.
 
-Papers and reference lists were retrieved from Europe PMC at build time. Edges are never invented: direct citation, co-citation, and bibliographic coupling only. Keyword fallback is declared if the citation graph is sparse (not used in the current bake). Displayed edges are capped at ~700.
+- Papers: Europe PMC + Crossref (never invented)
+- Edges: direct citation + co-citation at build time; keyword fallback only if sparse
+- Display cap: top ~700 edges by degree
+- Nodes: THREE.Sprite radial glows, Louvain jewel tones
+- UnrealBloomPass + starfield dust
+- Download corpus.zip from /data/corpus.zip
 
-```bash
-python3 scripts/build_corpus.py
-npm install
-npm run dev
-```
+Open `index.html` via any static host. No backend.

@@ -1,29 +1,27 @@
-import type { AuthorInput } from "./types";
-
-export function normalizeAuthors(authors: AuthorInput, fallback = ""): string[] {
+/** Authors may arrive as a string, a string[], or objects. */
+export function getFirstAuthor(authors) {
+  if (authors == null || authors === '') return 'Unknown';
   if (Array.isArray(authors)) {
-    return authors.map((a) => String(a).trim()).filter(Boolean);
+    if (!authors.length) return 'Unknown';
+    return getFirstAuthor(authors[0]);
   }
-  if (typeof authors === "string" && authors.trim()) {
-    return authors
-      .split(/\s*;\s*|\s+and\s+|,\s+(?=[A-Z])/
-      )
-      .map((a) => a.trim())
-      .filter(Boolean);
+  if (typeof authors === 'object') {
+    const given = (authors.given || '').trim();
+    const family = (authors.family || '').trim();
+    const name = `${given} ${family}`.trim() || authors.name || authors.fullname;
+    return name || 'Unknown';
   }
-  if (fallback.trim()) return normalizeAuthors(fallback);
-  return [];
+  const text = String(authors).trim();
+  if (!text) return 'Unknown';
+  const first = text.split(/\s*;\s*|\s+and\s+|,\s+(?=[A-Z])/)[0];
+  return first.trim() || 'Unknown';
 }
 
-export function getFirstAuthor(authors: AuthorInput, fallback = ""): string {
-  const list = normalizeAuthors(authors, fallback);
-  return list[0] || "Unknown";
-}
-
-export function formatAuthorList(authors: AuthorInput, fallback = ""): string {
-  const list = normalizeAuthors(authors, fallback);
-  if (list.length === 0) return "Unknown authors";
-  if (list.length === 1) return list[0];
-  if (list.length === 2) return `${list[0]} & ${list[1]}`;
-  return `${list[0]} et al.`;
+export function formatAuthors(authors, limit = 4) {
+  if (authors == null || authors === '') return 'Unknown';
+  const list = Array.isArray(authors) ? authors : [authors];
+  const names = list.map((a) => getFirstAuthor(a)).filter(Boolean);
+  if (!names.length) return 'Unknown';
+  if (names.length <= limit) return names.join(', ');
+  return `${names.slice(0, limit).join(', ')} +${names.length - limit}`;
 }

@@ -1,12 +1,12 @@
-# Connectome Star-Map
+# Citation Star-Map
 
-Fully static 3D citation atlas of real network-neuroscience papers.
+Fully static 3D citation star-map of real network-neuroscience / connectomics papers.
 
-- Papers: Europe PMC + Crossref (never invented)
-- Edges: direct citation + co-citation at build time; keyword fallback only if sparse
-- Display cap: top ~700 edges by degree
-- Nodes: THREE.Sprite radial glows, Louvain jewel tones
-- UnrealBloomPass + starfield dust
-- Download corpus.zip from /data/corpus.zip
+- Nodes: Crossref works with DOIs
+- Edges: baked at build time from Crossref reference lists (direct citation + co-citation). Keyword fallback only for isolates.
+- Renderer: react-force-graph-3d + THREE.Sprite glows + UnrealBloomPass
 
-Open `index.html` via any static host. No backend.
+```bash
+npm install
+npm run dev
+```

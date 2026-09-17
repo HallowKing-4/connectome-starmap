@@ -5,9 +5,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import "./styles.css";
 
 const rootEl = document.getElementById("root");
-if (!rootEl) {
-  throw new Error("root element missing");
-}
+if (!rootEl) throw new Error("root element missing");
 
 createRoot(rootEl).render(
   <StrictMode>

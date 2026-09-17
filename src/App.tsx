@@ -1,42 +1,37 @@
 import { useEffect, useState } from "react";
 import { StarMap } from "./StarMap";
-import type { GraphPayload, PaperNode } from "./types";
-
-async function loadGraph(): Promise<GraphPayload> {
-  const local = await fetch("./data/graph.json");
-  if (local.ok) return local.json();
-  const names = ["meta.json", "links.json", "nodes-0.json", "nodes-1.json", "nodes-2.json", "nodes-3.json"];
-  const [meta, links, n0, n1, n2, n3] = await Promise.all(
-    names.map((name) => fetch("./data/" + name).then((r) => {
-      if (!r.ok) throw new Error(name + " " + r.status);
-      return r.json();
-    }))
-  );
-  return {
-    nodes: [...n0, ...n1, ...n2, ...n3] as PaperNode[],
-    links,
-    communities: meta.communities,
-    completeness: meta.completeness,
-  };
-}
 
 export default function App() {
-  const [data, setData] = useState<GraphPayload | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     let alive = true;
-    loadGraph()
-      .then((payload) => { if (alive) setData(payload); })
-      .catch((err: unknown) => { if (alive) setError(err instanceof Error ? err.message : "load failed"); });
+    const urls = ["./data/graph.json", "./corpus-graph.json"];
+    (async () => {
+      let last = "no url tried";
+      for (const url of urls) {
+        try {
+          const res = await fetch(url);
+          if (!res.ok) { last = url + " " + res.status; continue; }
+          const payload = await res.json();
+          if (alive) setData(payload);
+          return;
+        } catch (err) {
+          last = err instanceof Error ? err.message : String(err);
+        }
+      }
+      if (alive) setError(last);
+    })();
     return () => { alive = false; };
   }, []);
+
   if (error) {
     return (
       <div className="fatal">
-        <div className="fatal-card">
-          <p className="kicker">Corpus</p>
-          <h1>The map could not be read.</h1>
-          <p>Baked graph JSON failed to load. {error}</p>
+        <div>
+          <h1>Corpus failed to load</h1>
+          <p>{error}</p>
         </div>
       </div>
     );
@@ -44,10 +39,9 @@ export default function App() {
   if (!data) {
     return (
       <div className="fatal">
-        <div className="fatal-card quiet">
-          <p className="kicker">Citation star-map</p>
-          <h1>Lighting the connectome…</h1>
-          <p>Baking was already done. This is just the JSON crossing the wire.</p>
+        <div>
+          <h1>Igniting the star-map</h1>
+          <p>Loading the baked citation corpus…</p>
         </div>
       </div>
     );

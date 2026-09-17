@@ -13,11 +13,9 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <div className="fatal">
-          <div className="fatal-card">
-            <p className="kicker">Star-map runtime</p>
-            <h1>The sky did not collapse.</h1>
-            <p>A renderer exception was caught by the root ErrorBoundary.</p>
-            <pre>{this.state.error.message}</pre>
+          <div>
+            <h1>The star-map failed to ignite</h1>
+            <p>{this.state.error.message}</p>
             <button type="button" onClick={() => window.location.reload()}>Reload</button>
           </div>
         </div>

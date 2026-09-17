@@ -1,51 +1,93 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-const cache = new Map<string, THREE.CanvasTexture>();
+export const JEWELS = [
+  '#f472b6',
+  '#a78bfa',
+  '#22d3ee',
+  '#34d399',
+  '#fb7185',
+  '#fbbf24',
+  '#60a5fa',
+  '#c084fc',
+];
 
-export function glowTexture(hex: string): THREE.CanvasTexture {
-  const key = hex.toLowerCase();
-  const hit = cache.get(key);
-  if (hit) return hit;
+let glowTexture = null;
+
+export function getGlowTexture() {
+  if (glowTexture) return glowTexture;
   const size = 128;
-  const canvas = document.createElement("canvas");
+  const canvas = document.createElement('canvas');
   canvas.width = size;
   canvas.height = size;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    const tex = new THREE.CanvasTexture(canvas);
-    cache.set(key, tex);
-    return tex;
-  }
-  const h = hex.replace("#", "");
-  const n = parseInt(h.length === 3 ? h.split("").map((c) => c + c).join("") : h, 16);
-  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
-  const c = size / 2;
-  const grad = ctx.createRadialGradient(c, c, 0, c, c, c);
-  grad.addColorStop(0.0, "rgba(255,255,255,0.95)");
-  grad.addColorStop(0.12, `rgba(${r},${g},${b},0.95)`);
-  grad.addColorStop(0.32, `rgba(${r},${g},${b},0.55)`);
-  grad.addColorStop(0.58, `rgba(${r},${g},${b},0.16)`);
-  grad.addColorStop(1.0, `rgba(${r},${g},${b},0)`);
-  ctx.clearRect(0, 0, size, size);
-  ctx.fillStyle = grad;
+  const ctx = canvas.getContext('2d');
+  const g = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+  g.addColorStop(0.0, 'rgba(255,255,255,1)');
+  g.addColorStop(0.18, 'rgba(255,255,255,0.85)');
+  g.addColorStop(0.38, 'rgba(255,255,255,0.28)');
+  g.addColorStop(0.62, 'rgba(255,255,255,0.07)');
+  g.addColorStop(1.0, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g;
   ctx.fillRect(0, 0, size, size);
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.needsUpdate = true;
-  tex.colorSpace = THREE.SRGBColorSpace;
-  cache.set(key, tex);
-  return tex;
+  glowTexture = new THREE.CanvasTexture(canvas);
+  glowTexture.needsUpdate = true;
+  return glowTexture;
 }
 
-export function makeStarSprite(hex: string, scale: number): THREE.Sprite {
-  const mat = new THREE.SpriteMaterial({
-    map: glowTexture(hex),
-    color: 0xffffff,
+export function jewelFor(community) {
+  return JEWELS[community % JEWELS.length];
+}
+
+export function makeStarSprite(node, { dim = false, hot = false } = {}) {
+  const color = jewelFor(node.community ?? 0);
+  const material = new THREE.SpriteMaterial({
+    map: getGlowTexture(),
+    color: new THREE.Color(color),
     transparent: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
-    opacity: 1,
+    opacity: dim ? 0.12 : hot ? 1 : 0.92,
   });
-  const sprite = new THREE.Sprite(mat);
+  const sprite = new THREE.Sprite(material);
+  const cites = node.cited_by_count || 0;
+  const base = 5.2 + Math.log1p(cites) * 1.15;
+  const scale = dim ? base * 0.55 : hot ? base * 1.35 : base;
   sprite.scale.set(scale, scale, 1);
+  sprite.userData.nodeId = node.id;
   return sprite;
+}
+
+export function addStarfield(scene, count = 1400) {
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const col = new THREE.Color();
+  for (let i = 0; i < count; i++) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+    const r = 420 + Math.random() * 780;
+    positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.62;
+    positions[i * 3 + 2] = r * Math.cos(phi);
+    const t = Math.random();
+    col.setHSL(0.55 + t * 0.2, 0.15, 0.55 + Math.random() * 0.4);
+    colors[i * 3] = col.r;
+    colors[i * 3 + 1] = col.g;
+    colors[i * 3 + 2] = col.b;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  const mat = new THREE.PointsMaterial({
+    size: 1.15,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.55,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const points = new THREE.Points(geo, mat);
+  points.name = 'starfield-dust';
+  scene.add(points);
+  return points;
 }

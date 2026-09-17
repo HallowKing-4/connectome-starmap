@@ -1,0 +1,50 @@
+{
+  "communities": [
+    {"id": 0, "size": 60, "label": "Resting-state & network economy"},
+    {"id": 1, "size": 51, "label": "Human Connectome Project"},
+    {"id": 2, "size": 39, "label": "Graph theory & disorders"},
+    {"id": 3, "size": 33, "label": "Toolboxes & cortical hubs"},
+    {"id": 4, "size": 26, "label": "Invertebrate connectomes"},
+    {"id": 5, "size": 1, "label": "Enhancer connectome"}
+  ],
+  "completeness": {
+    "n_papers": 210,
+    "n_with_abstract": 209,
+    "abstract_coverage": 0.995,
+    "n_with_reference_list": 203,
+    "n_with_reference_dois": 203,
+    "reference_doi_coverage": 0.967,
+    "n_direct_citation_edges_in_corpus": 1093,
+    "n_cocitation_pairs_in_corpus": 2459,
+    "n_display_edges": 741,
+    "display_edge_types": {
+      "direct_citation": 729,
+      "cocitation": 7,
+      "keyword_cooccurrence": 5
+    },
+    "fallbacks_used": ["keyword_cooccurrence"],
+    "note": "Edges are computed only from Crossref reference lists (DOI-matched) inside this corpus. Direct citation = paper A lists paper B. Co-citation = some corpus paper cites both endpoints. Bibliographic coupling and title-keyword co-occurrence are fallbacks used only when the citation graph is sparse or leaves isolates. No edges were invented.",
+    "sources": ["Crossref Works API (metadata + reference lists)", "Europe PMC (abstracts)"],
+    "built_at": "2026-09-17"
+  },
+  "meta": {
+    "n_papers": 210,
+    "n_with_abstract": 209,
+    "abstract_coverage": 0.995,
+    "n_with_reference_list": 203,
+    "n_with_reference_dois": 203,
+    "reference_doi_coverage": 0.967,
+    "n_direct_citation_edges_in_corpus": 1093,
+    "n_cocitation_pairs_in_corpus": 2459,
+    "n_display_edges": 741,
+    "display_edge_types": {
+      "direct_citation": 729,
+      "cocitation": 7,
+      "keyword_cooccurrence": 5
+    },
+    "fallbacks_used": ["keyword_cooccurrence"],
+    "note": "Edges are computed only from Crossref reference lists (DOI-matched) inside this corpus. Direct citation = paper A lists paper B. Co-citation = some corpus paper cites both endpoints. No edges were invented.",
+    "sources": ["Crossref Works API (metadata + reference lists)", "Europe PMC (abstracts)"],
+    "built_at": "2026-09-17"
+  }
+}
